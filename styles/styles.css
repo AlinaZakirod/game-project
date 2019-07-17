@@ -1,0 +1,16 @@
+body {
+    margin-inline-end: 0;
+    text-align: center;
+  }
+ canvas{
+     border: 1px solid green;
+     /* background-image: url('../images/2842.jpg'); */
+     background-size: cover;
+     background-color: aqua;
+ }
+ #pause-button{
+     display: none;
+ } 
+#second-level{
+    display: none;
+} 
