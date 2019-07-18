@@ -13,8 +13,9 @@ canvas.width = 1000;
 canvas.height = 600;
 var ctx = canvas.getContext('2d');
 
-
 document.getElementById("my-game").style.display = "none";//hide it before Start button is pressed
+
+let gameIsRunning;
 
 class Game{
     constructor(){
@@ -22,7 +23,6 @@ class Game{
         this.score = 0;
     }
 }
-
 
 //class for of letters of all the fonts
 class Letter{
@@ -44,13 +44,40 @@ class Letter{
 
 } // end of Letter Class
 
+class Boom{
+    constructor(x,y){
+        this.spriteWidth = 3840
+        this.spriteHeight = 192
+        this.spries = 20
+        this.width = this.spriteWidth / this.spries
+        this.currentFrame = 0
+        this.frameCount = 20
+        this.x = x
+        this.y = y
+        this.speed = 12
+        this.img = 'images/boom.png'
+        this.srcX = 0
+        this.srcY = 0
+    }
+
+    updateBoom(){
+        this.currentFrame = ++this.currentFrame % this.frameCount
+        this.srcX = this.currentFrame* this.width
+    }
+
+    drawBoom(){
+        this.updateFrame()
+        let boomStripe = new Image()
+        boomStripe.src =this.img
+        ctx.drawImage(boomStripe, this.srcX, this.srcY, this.width, this.spriteHeight, this.x, this.y, this.width, this.spriteHeight)
+    }
+}
+
+let explosion = new Boom;
 
 // for Start button use following lines:
-
 let currentGame;
 let frames = 0;
-
-// let gameIsRunning = false;//to be able pause game
 
 
 document.getElementById("start-button").onclick = function() {
@@ -63,33 +90,30 @@ let mouse = {
 }
 
 function startGame() {
-    
+
     currentGame = new Game();
-    document.getElementById('myScore').innerHTML = 0;
     document.getElementById('my-game').addEventListener('click', function(e){
        mouse.x = event.x;
        mouse.y = event.y; 
-       console.log(mouse.x, mouse.y);
-  
-    //    gameIsRunning = true;
     });
+    gameIsRunning = true;
+    
 
     document.getElementById("my-game").style.display = "block";
     document.getElementById('pause-button').style.display = 'block';
     document.getElementById('start-button').style.display = 'none'
     currentGame = new Game();
+
     drawGame();
+
 }
 
-document.getElementById("pause-button").onclick = function() {
+document.getElementById("pause-button").onclick = function()  {
     pauseGame();
   };
 function pauseGame() {
-        document.getElementById('my-game').style.display = 'none';
         document.getElementById('start-button').style.display = 'block';
-        document.getElementById('pause-button').style.display = 'none'
-        currentGame.score = 0;
-        document.getElementById('myScore').innerHTML = currentGame.score;
+        document.getElementById('pause-button').style.display = 'none';
         gameIsRunning = false;
         console.log('stop') ;
 }
@@ -97,8 +121,8 @@ function pauseGame() {
 function drawGame(){
     ctx.clearRect(0,0,1000,600);
     frames ++;
-    // console.log('a')
 
+    
     if(frames % 50 === 1 ){
         randomLetterX = Math.floor(Math.random() * 600);
         letterY = -80; //to start from the top
@@ -110,6 +134,8 @@ function drawGame(){
       } 
       for (let i=0; i < currentGame.letters.length; i++){
         currentGame.letters[i].y += 2;
+
+        console.log("--------", currentGame.letters[i].y)
         currentGame.letters[i].drawLetter();
           
             if(currentGame.letters[i].x < mouse.x && mouse.x < currentGame.letters[i].x + currentGame.letters[i].width && currentGame.letters[i].y < mouse.y && mouse.y < currentGame.letters[i].y + currentGame.letters[i].height && currentGame.letters[i].letterImage.src.includes('28')){
@@ -117,18 +143,33 @@ function drawGame(){
             x = 0;
             y = 0;
             currentGame.letters.splice(i, 1);
-            currentGame.score ++
+            if(gameIsRunning){
+                currentGame.score ++
+            }
             document.getElementById('myScore').innerHTML = currentGame.score; 
             }
         //remove image of clicked letter and add score
-        
+
+        if(!gameIsRunning){//style for "pause" state
+            ctx.rect(0,0,1000, 600);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
+            ctx.fill();
+            ctx.font = '30px Arial';
+            ctx.fillStyle ='white';
+            ctx.textAlign = 'center';
+            ctx.fillText('Paused', 300 , 400)
+       }
 
         //when letters reach the bottom
         if(currentGame.letters[i].y >= (640 - currentGame.letters[i].height) && currentGame.letters[i].letterImage.src.includes('28')){
-            // console.log('Fuego!Fuego!Fire!Fire');
+            
+            drawBoom(explosion);
             currentGame.letters.splice(i, 1);
+            
             //for later score counting:
-            currentGame.score --;
+            if(gameIsRunning){
+                currentGame.score --;
+            }
             document.getElementById('myScore').innerHTML = currentGame.score;  
         }
 
@@ -139,13 +180,12 @@ function drawGame(){
         currentGame.letters = [];
         ctx.font = "70px bold Arial";
         ctx.fillStyle = "red";
-        ctx.fillText("GAME OVER!", 300, 200);
+        ctx.fillText("Game Over", 300, 200);
         document.getElementById('start-button').style.display = 'block';
         document.getElementById('pause-button').style.display = 'none';
     } 
 
     if(currentGame.score > 10){
-        document.getElementById('myScore').innerHTML = 0;
         currentGame.letters = [];
         ctx.font = "70px bold Arial";
         ctx.fillStyle = "red";
@@ -153,9 +193,10 @@ function drawGame(){
         document.getElementById('start-button').style.display = 'none';
         document.getElementById('pause-button').style.display = 'none';
         document.getElementById('second-level').style.display = 'block';
-        }
-    requestAnimationFrame(drawGame);   
+    }
+    // to stop running the function behind the scene when the "pause" button is clicked
+    // this also controls the speed 
+    if(gameIsRunning){
+        requestAnimationFrame(drawGame);
+    }  
  }
-
-drawGame();
-
