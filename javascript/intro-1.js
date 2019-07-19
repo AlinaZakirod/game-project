@@ -13,14 +13,14 @@
 // canvas.height = 600;
 // const ctx = canvas.getContext('2d');
 
-const gameRunningBackground = new Image();
-gameRunningBackground.src = './images/2842CS.jpg';
-const gameStartBackground = new Image();
-gameStartBackground.src = './images/car.png';
-const gameOverBackground = new Image();
-gameOverBackground.src = './images/screen.png';
-const victoryBackground = new Image();
-victoryBackground.src = '.images/car.png'
+// const gameRunningBackground = new Image();
+// gameRunningBackground.src = './images/bg/screen_frame.png';
+// const gameStartBackground = new Image();
+// gameStartBackground.src = './images/screen-frame.png';
+// const gameOverBackground = new Image();
+// gameOverBackground.src = './images/bg/victory.jpg';
+// const victoryBackground = new Image();
+// victoryBackground.src = '.images/fuego.png'
 
 window.onload =  function(){
     const canvas = document.querySelector('canvas');
@@ -185,58 +185,34 @@ function startGame() {
 //             ctx.drawImage(coinSprite, this.srcX, this.srcY, this.width, this.spriteHeight, this.x, this.y, this.width, this.spriteHeight)
 //         }
 //       }
+    
+
+
+
 // let boomAnimation = new Coin('./images/sprite.png');
 
-//___________________________
-// class Sprite {
-//     constructor(src,x, y){
-//         this.spriteWidth = 440;
-//         this.spriteHeight = 40;
-//         this.sprites = 10;
-//         this.width = this.spriteWidth/this.sprites;
-//         this.curFrame = 0;
-//         frameCount = 10;
-//         this.x = x;
-//         this.y = y;
-//         this.srcX = 0;
-//         this.srcY = 0;
-//         this.speed = 2;
-//         this.src = src;
-//     }
-//     updateFrame(){
-//         curFrame = ++ curFrame % frameCount;
-//         srcX = curFrame * width;
-//         ctx.clearRect(x, y, width, spriteHeight);
-//         }
-//     drawFrame(){
-//         this.updateFrame();
-//         ctx.drawImage(this.src, this.srcX, this.srcY, this.width, this.spriteHeight, this.x, this.y, this.width, spriteHeight);
-//     }
-// }
 
-// let boom = new Sprite('./images/sprite.png');
-
-const spriteWidth = 440;
-const spriteHeight = 40;
-var colls = 10;
+const spriteWidth = 400;
+const spriteHeight = 80;
+var colls = 5;
 var width = spriteWidth/colls;
 var curFrame = 0;
-var frameCount = 2;
-let a 
-let b 
+var frameCount = 10;
+let a;
+let b;
 var srcX = 0;
 var srcY = 0;
-var speed = 2;
+var speed = 1000;
 var character = new Image();
 character.src = './images/explosionSprite.png';
 
 function updateFrame(){
     curFrame = ++ curFrame % frameCount;
     srcX = curFrame * width;
-    // ctx.clearRect(a, b, width, spriteHeight);
+    ctx.clearRect(a, b, width, spriteHeight);
 }
 
-function drawFrame(a, b){
+function draw(a, b){
     updateFrame();
     ctx.drawImage(character, srcX, srcY, width, spriteHeight, a, b, width, spriteHeight);
 }
@@ -259,11 +235,13 @@ function pauseGame() {
 function drawGame(){
     ctx.clearRect(0,0,1024,600);
     frames ++;
-    ctx.drawImage(gameRunningBackground, 0, 0)
+    ctx.drawImage(gameRunningBackground, 0, 0);
+    // ctx.drawRect(0,0,1024,600);
+    // ctx.fillStyle = 'grey';
     
     if(frames % 50 === 1 ){
         randomLetterX = Math.floor(Math.random() * 600);
-        letterY = -80; //to start from the top
+        letterY = 64; //to start from the top
         letterWidth  = 80;
         letterHeight = 80;
 
@@ -273,16 +251,21 @@ function drawGame(){
       for (let i=0; i < currentGame.letters.length; i++){
         currentGame.letters[i].y += 2;
 
-        // console.log("--------", currentGame.letters[i].y)
+        console.log("--------", currentGame.letters[i].y)
         currentGame.letters[i].drawLetter();
             if(currentGame.letters[i].x < mouse.x && mouse.x < currentGame.letters[i].x + currentGame.letters[i].width && currentGame.letters[i].y < mouse.y && mouse.y < currentGame.letters[i].y + currentGame.letters[i].height && currentGame.letters[i].letterImage.src.includes('28')){
-            a = currentGame.letters[i].x
-            b = currentGame.letters[i].y 
+            c = currentGame.letters[i].x
+            d = currentGame.letters[i].y
+            // a = currentGame.letters[i].x + (currentGame.letters[i].width / 2);
+            // b = currentGame.letters[i].y + (currentGame.letters[i].height / 2);
+            // a = mouse.x;
+            // b = mouse.y
+            draw(character);
             console.log('kjvbdfjhbjk');
             boomSound.play();
-            drawFrame(a, b);
-            x = 0;
-            y = 0;
+            
+            mouse.x = 0;
+            mouse.y = 0;
             currentGame.letters.splice(i, 1);
             boomSound.play();
             if(gameIsRunning){
@@ -347,4 +330,3 @@ function drawGame(){
     }  
  }
 }
-
