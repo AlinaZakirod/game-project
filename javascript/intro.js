@@ -14,13 +14,13 @@
 // const ctx = canvas.getContext('2d');
 
 const gameRunningBackground = new Image();
-gameRunningBackground.src = './images/2842CS.jpg';
+gameRunningBackground.src = './images/bg/screen_frame.png';
 const gameStartBackground = new Image();
 gameStartBackground.src = './images/car.png';
 const gameOverBackground = new Image();
-gameOverBackground.src = './images/screen.png';
+gameOverBackground.src = './images/gameOver.png';
 const victoryBackground = new Image();
-victoryBackground.src = '.images/car.png'
+victoryBackground.src = './images/bg/screen_frame.png';
 
 window.onload =  function(){
     const canvas = document.querySelector('canvas');
@@ -48,7 +48,7 @@ class Letter{
         this.y = y;
         this.width = width;
         this.height = height;
-        this.arrayOfPaths = ['images/2842CS.jpg','./images/car.png','./images/screen.png'];
+        this.arrayOfPaths = ['./images/letters/a_Bodoni.png', './images/letters/a_CS.png', './images/letters/a_Helvetica.png', './images/letters/b_Bodoni.png', './images/letters/b_CS.png', './images/letters/b_Helvetica.png', './images/letters/c_Bodoni.png', './images/letters/c_CS.png', './images/letters/c_Helvetica.png', './images/letters/d_Bodoni.png', './images/letters/d_CS.png', './images/letters/d_Helvetica.png', './images/letters/e_Bodoni.png', './images/letters/e_CS.png', './images/letters/e_Helvetica.png', './images/letters/f_Bodoni.png', './images/letters/f_CS.png', './images/letters/f_Helvetica.png', './images/letters/g_Bodoni.png', './images/letters/g_CS.png', './images/letters/g_Helvetica.png', './images/letters/h_Bodoni.png', './images/letters/h_CS.png', './images/letters/h_Helvetica.png', './images/letters/i_Bodoni.png', './images/letters/i_CS.png', './images/letters/i_Helvetica.png', './images/letters/j_Bodoni.png', './images/letters/j_CS.png', './images/letters/j_Helvetica.png', './images/letters/k_Bodoni.png', './images/letters/k_CS.png', './images/letters/k_Helvetica.png', './images/letters/l_Bodoni.png', './images/letters/l_CS.png', './images/letters/l_Helvetica.png', './images/letters/m_Bodoni.png', './images/letters/m_CS.png', './images/letters/m_Helvetica.png', './images/letters/n_Bodoni.png', './images/letters/n_CS.png', './images/letters/n_Helvetica.png', './images/letters/o_Bodoni.png', './images/letters/o_CS.png', './images/letters/o_Helvetica.png', './images/letters/p_Bodoni.png', './images/letters/p_CS.png', './images/letters/p_Helvetica.png', './images/letters/q_Bodoni.png', './images/letters/q_CS.png', './images/letters/q_Helvetica.png', './images/letters/r_Bodoni.png', './images/letters/r_CS.png', './images/letters/r_Helvetica.png', './images/letters/s_Bodoni.png', './images/letters/s_CS.png', './images/letters/s_Helvetica.png', './images/letters/t_Bodoni.png', './images/letters/t_CS.png', './images/letters/t_Helvetica.png', './images/letters/u_Bodoni.png', './images/letters/u_CS.png', './images/letters/u_Helvetica.png', './images/letters/v_Bodoni.png', './images/letters/v_CS.png', './images/letters/v_Helvetica.png', './images/letters/w_Bodoni.png', './images/letters/w_CS.png', './images/letters/w_Helvetica.png', './images/letters/x_Bodoni.png', './images/letters/x_CS.png', './images/letters/x_Helvetica.png', './images/letters/y_Bodoni.png', './images/letters/y_CS.png', './images/letters/y_Helvetica.png', './images/letters/z_Bodoni.png', './images/letters/z_CS.png', './images/letters/z_Helvetica.png',]; 
         this.randomPath = Math.floor(Math.random()*this.arrayOfPaths.length);
         this.letterImage = new Image();
         this.letterImage.src = this.arrayOfPaths[this.randomPath];
@@ -78,51 +78,8 @@ function sound(src){
     }
 }
 
-const boomSound = new sound ('./sounds/explosion.wav');
-
-// animate tut
-// let img = new Image();
-// img.src = './images/Preview-Green-Cap-Character-16x18.png'
-// const scale = 2;
-// const width = 16;
-// const height = 18;
-// const scaleWidth = scale * width;
-// const scaleHeight = scale * height;
-
-// function drawFrame(frameX, frameY, canvasX, canvasY){
-//     ctx.drawImage(img, frameX * width, frameY * height, width, height, 80, 80, scaleWidth, scaleHeight);
-// }
-// function init() {
-//     window.requestAnimationFrame(step);
-// }
-//  const cycleLoop = [0, 1, 0, 2];
-//  let currentLoopIndex = 0;
-//  let frameCount = 0;
-
-//  function step() {
-//     frameCount ++;
-//     if( frameCount < 15){
-//         window.requestAnimationFrame(step);
-//         return;
-//     }
-//     frameCount = 0;
-//      ctx.clearRect(0, 0, canvas.width, canvas.height);
-//      drawFrame(cycleLoop[currentLoopIndex], 0 , 0 , 0);
-//      currentLoopIndex ++;
-//      if (currentLoopIndex >= cycleLoop.length) {
-//          currentLoopIndex = 0;
-//      }
-//      window.requestAnimationFrame(step);
-//  }
-
-//end of tut
-
-
-// 
-
-
-
-
+const cheerSound = new sound ('./sounds/cheer.wav');
+const boomSound = new sound('./sounds/boom.wav')
 
 // for Start button use following lines:
 let currentGame;
@@ -216,30 +173,30 @@ function startGame() {
 
 // let boom = new Sprite('./images/sprite.png');
 
-const spriteWidth = 440;
-const spriteHeight = 40;
-var colls = 10;
-var width = spriteWidth/colls;
-var curFrame = 0;
-var frameCount = 2;
-let a 
-let b 
-var srcX = 0;
-var srcY = 0;
-var speed = 2;
-var character = new Image();
-character.src = './images/explosionSprite.png';
+// const spriteWidth = 440;
+// const spriteHeight = 40;
+// var colls = 10;
+// var width = spriteWidth/colls;
+// var curFrame = 0;
+// var frameCount = 2;
+// let a 
+// let b 
+// var srcX = 0;
+// var srcY = 0;
+// var speed = 2;
+// var character = new Image();
+// character.src = './images/explosionSprite.png';
 
-function updateFrame(){
-    curFrame = ++ curFrame % frameCount;
-    srcX = curFrame * width;
-    // ctx.clearRect(a, b, width, spriteHeight);
-}
+// function updateFrame(){
+//     curFrame = ++ curFrame % frameCount;
+//     srcX = curFrame * width;
+//     // ctx.clearRect(a, b, width, spriteHeight);
+// }
 
-function drawFrame(a, b){
-    updateFrame();
-    ctx.drawImage(character, srcX, srcY, width, spriteHeight, a, b, width, spriteHeight);
-}
+// function drawFrame(a, b){
+//     updateFrame();
+//     ctx.drawImage(character, srcX, srcY, width, spriteHeight, a, b, width, spriteHeight);
+// }
 
 
 
@@ -273,22 +230,25 @@ function drawGame(){
       for (let i=0; i < currentGame.letters.length; i++){
         currentGame.letters[i].y += 2;
 
-        // console.log("--------", currentGame.letters[i].y)
+        console.log("--------", mouse.x, mouse.y, currentGame.letters[i].x, currentGame.letters[i].y)
         currentGame.letters[i].drawLetter();
-            if(currentGame.letters[i].x < mouse.x && mouse.x < currentGame.letters[i].x + currentGame.letters[i].width && currentGame.letters[i].y < mouse.y && mouse.y < currentGame.letters[i].y + currentGame.letters[i].height && currentGame.letters[i].letterImage.src.includes('28')){
-            a = currentGame.letters[i].x
-            b = currentGame.letters[i].y 
-            console.log('kjvbdfjhbjk');
-            boomSound.play();
-            drawFrame(a, b);
-            x = 0;
-            y = 0;
-            currentGame.letters.splice(i, 1);
-            boomSound.play();
-            if(gameIsRunning){
-                currentGame.score ++
-            }
-            document.getElementById('myScore').innerHTML = currentGame.score; 
+
+            if(currentGame.letters[i].x < mouse.x && mouse.x < currentGame.letters[i].x + currentGame.letters[i].width && currentGame.letters[i].y < mouse.y && mouse.y < currentGame.letters[i].y + currentGame.letters[i].height && currentGame.letters[i].letterImage.src.includes('CS'))
+            {
+                currentGame.letters.splice(i, 1);
+                x = 0;
+                y = 0;
+                
+                document.getElementById('myScore').innerHTML = currentGame.score;  
+                console.log('kjvbdfjhbjk');
+                cheerSound.play();
+                 // a = currentGame.letters[i].x
+                // b = currentGame.letters[i].y
+                // drawFrame(a, b);
+                
+                if(gameIsRunning){
+                    currentGame.score ++
+                }
             }
         //remove image of clicked letter and add score
 
@@ -303,9 +263,9 @@ function drawGame(){
        }
 
         //when letters reach the bottom
-        if(currentGame.letters[i].y >= (680 - currentGame.letters[i].height) && currentGame.letters[i].letterImage.src.includes('28')){
+        if(currentGame.letters[i].y >= (680 - currentGame.letters[i].height) && currentGame.letters[i].letterImage.src.includes('CS')){
             
-            
+            boomSound.play();
             currentGame.letters.splice(i, 1);
             
             //for later score counting:
@@ -323,7 +283,7 @@ function drawGame(){
         ctx.drawImage(gameOverBackground, 0, 0);
         currentGame.letters = [];
         ctx.font = "70px bold Arial";
-        ctx.fillStyle = "red";
+        ctx.fillStyle = "white";
         ctx.fillText("Game Over", 300, 200);
         document.getElementById('start-button').style.display = 'block';
         document.getElementById('pause-button').style.display = 'none';
