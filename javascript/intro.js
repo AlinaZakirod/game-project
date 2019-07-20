@@ -30,7 +30,9 @@ window.onload =  function(){
     // document.getElementById("my-game").style.display = "none";//hide it before Start button is pressed
     ctx.drawImage(gameStartBackground,0,0);
 
-
+    canvas.onclick = function(e){
+        storeGuess(e);
+    }
 
 let gameIsRunning;
 
@@ -98,10 +100,11 @@ let mouse = {
 function startGame() {
 
     currentGame = new Game();
-    document.getElementById('my-game').addEventListener('click', function(e){
-       mouse.x = event.x;
-       mouse.y = event.y; 
-    });
+    // document.getElementById('my-game').addEventListener('click', function(e){
+    //    mouse.x = event.x;
+    //    mouse.y = event.y; 
+    //    console.log('mouse = == = = = = == = = = ', mouse.x, mouse.y);
+    // });
     gameIsRunning = true;
     
 
@@ -109,142 +112,136 @@ function startGame() {
     document.getElementById('pause-button').style.display = 'block';
     document.getElementById('start-button').style.display = 'none'
     currentGame = new Game();
-
     drawGame();
-
 }
 
+// ------------------------____________________________------------------------____________________________
 
-// class Coin {
-//         constructor(src) {
-//             this.spriteWidth = 440
-//             this.spriteHeight = 40
-//             this.sprites = 10
-//             this.width = this.spriteWidth / this.sprites
-//             this.currentFrame = 0
-//             this.frameCount = 10
-//             this.x = x
-//             this.y = y
-//             this.speed = 12
-//             this.src = src
-//             this.srcX = 0
-//             this.srcY = 0
-//         }
-//         upateFrame() {
-//             this.currentFrame = ++this.currentFrame % this.frameCount
-//             this.srcX = this.currentFrame * this.width;
-//             ctx.clearRect(x, y, spriteWidth, spriteHeight);
-//         }
-//         drawFrame() {
-//             this.upateFrame()
-//             let coinSprite = new Image()
-//             coinSprite.src = this.img
-//             ctx.drawImage(coinSprite, this.srcX, this.srcY, this.width, this.spriteHeight, this.x, this.y, this.width, this.spriteHeight)
-//         }
-//       }
-// let boomAnimation = new Coin('./images/sprite.png');
+const spriteWidth = 1280;
+const spriteHeight = 80;
+var cols = 16;
+var width = spriteWidth/cols;
+var curFrame = 0;
+var frameCount = 16;
+let a = 100
+let b = 100
+var srcX = 0;
+var srcY = 0;
+var boomSprite = new Image();
+boomSprite.src = './images/sprites/Effect-fire-16.png';
 
-//___________________________
+function updateSprite(){
+    // curFrame++;
+    curFrame = ++curFrame % frameCount;
+    // srcX = curFrame * width;
+    ctx.clearRect(a, b, width, spriteHeight);
+}
+
+function drawSprite(a,b){
+    setTimeout(updateSprite(), 16000);
+    console.log('jhgdfigh');
+    // updateSprite();
+    ctx.drawImage(boomSprite, srcX, srcY, width, spriteHeight, a, b, width, spriteHeight);
+    // updateSprite();
+     }
+// _________________________________________________________________________
 // class Sprite {
-//     constructor(src,x, y){
-//         this.spriteWidth = 440;
-//         this.spriteHeight = 40;
-//         this.sprites = 10;
-//         this.width = this.spriteWidth/this.sprites;
+//     constructor(src, x, y){
+//         this.spriteWidth = 1280;
+//         this.spriteHeight = 80;
+//         this.frames = 16;
+//         this.width = this.spriteWidth/this.frames;
 //         this.curFrame = 0;
-//         frameCount = 10;
-//         this.x = x;
-//         this.y = y;
-//         this.srcX = 0;
-//         this.srcY = 0;
-//         this.speed = 2;
-//         this.src = src;
+//         this.frameCount = 16;
+//         this.x = 100;
+//         this.y = 100;
+//         this.srcX = x;
+//         this.srcY = y;
+//         // this.speed = 200;
+//         this.image = new Image()
+//         this.image.src = src
 //     }
 //     updateFrame(){
-//         curFrame = ++ curFrame % frameCount;
-//         srcX = curFrame * width;
-//         ctx.clearRect(x, y, width, spriteHeight);
+//         this.curFrame = ++ this.curFrame % this.frames;
+//         this.srcX = this.curFrame * this.width;
+//         this.srcY = 0;
+//         ctx.clearRect(this.x, this.y, this.width, this.spriteHeight);
 //         }
 //     drawFrame(){
-//         this.updateFrame();
-//         ctx.drawImage(this.src, this.srcX, this.srcY, this.width, this.spriteHeight, this.x, this.y, this.width, spriteHeight);
+
+//     //     ctx.drawImage(this.image, this.x, this.y);
+//     //     console.log('draw frame!', this.image)
+//     //     this.updateFrame();
+//     //     ctx.drawImage('./images/fuego.png', 100, 100, 100, 100);
+//         ctx.fillRect(40, 40, 40, 40)
+
+//     //  //ctx.drawImage()
 //     }
 // }
 
-// let boom = new Sprite('./images/sprite.png');
-
-// const spriteWidth = 440;
-// const spriteHeight = 40;
-// var colls = 10;
-// var width = spriteWidth/colls;
-// var curFrame = 0;
-// var frameCount = 2;
-// let a 
-// let b 
-// var srcX = 0;
-// var srcY = 0;
-// var speed = 2;
-// var character = new Image();
-// character.src = './images/explosionSprite.png';
-
-// function updateFrame(){
-//     curFrame = ++ curFrame % frameCount;
-//     srcX = curFrame * width;
-//     // ctx.clearRect(a, b, width, spriteHeight);
-// }
-
-// function drawFrame(a, b){
-//     updateFrame();
-//     ctx.drawImage(character, srcX, srcY, width, spriteHeight, a, b, width, spriteHeight);
-// }
-
-
-
-
-//_______________________________________________________________________________
+// let boomSprite;
 
 document.getElementById("pause-button").onclick = function()  {
     pauseGame();
-  };
+};
+
 function pauseGame() {
-        document.getElementById('start-button').style.display = 'block';
-        document.getElementById('pause-button').style.display = 'none';
-        gameIsRunning = false;
-        console.log('stop') ;
+    document.getElementById('start-button').style.display = 'block';
+    document.getElementById('pause-button').style.display = 'none';
+    gameIsRunning = false;
+    // console.log('stop') ;
 }
 
+guessX = 0; //stores user's click on canvas
+guessY = 0; //stores user's click on canvas
+function storeGuess(event) {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    guessX = x;
+    guessY = y;
+    console.log("x coords: " + guessX + ", y coords: " + guessY);
+}
+
+
+
 function drawGame(){
+
     ctx.clearRect(0,0,1024,600);
     frames ++;
     ctx.drawImage(gameRunningBackground, 0, 0)
     
     if(frames % 50 === 1 ){
         randomLetterX = Math.floor(Math.random() * 600);
-        letterY = -80; //to start from the top
+        letterY = 58; //to start from the top
         letterWidth  = 80;
         letterHeight = 80;
 
         let letter = new Letter(randomLetterX, letterY, letterWidth, letterHeight);
+        
         currentGame.letters.push(letter);
       } 
       for (let i=0; i < currentGame.letters.length; i++){
         currentGame.letters[i].y += 2;
-
-        console.log("--------", mouse.x, mouse.y, currentGame.letters[i].x, currentGame.letters[i].y)
+        
+        // console.log(currentGame.letters[i], randomLetterX, letterY)
         currentGame.letters[i].drawLetter();
 
-            if(currentGame.letters[i].x < mouse.x && mouse.x < currentGame.letters[i].x + currentGame.letters[i].width && currentGame.letters[i].y < mouse.y && mouse.y < currentGame.letters[i].y + currentGame.letters[i].height && currentGame.letters[i].letterImage.src.includes('CS'))
-            {
+            if(currentGame.letters[i].x < guessX && guessX < currentGame.letters[i].x + currentGame.letters[i].width && currentGame.letters[i].y < guessY && guessY < currentGame.letters[i].y + currentGame.letters[i].height && currentGame.letters[i].letterImage.src.includes('CS')){
+                // console.log('ON CLICK COLLISION!!!!!! = = == = == = = =')
+                drawSprite(currentGame.letters[i].x, currentGame.letters[i].y );
                 currentGame.letters.splice(i, 1);
-                x = 0;
-                y = 0;
+                guessX = 0;
+                guessY = 0;
+                // drawSprite(currentGame.letters[i].x, currentGame.letters[i].y )
+                // boomSprite = new Sprite("./images/sprites/Effect-fire-16.png", currentGame.letters[i].x , currentGame.letters[i].y );
+                // console.log('boom: ', boomSprite);
+                // boomSprite.drawFrame();
+                
                 
                 document.getElementById('myScore').innerHTML = currentGame.score;  
-                console.log('kjvbdfjhbjk');
-                cheerSound.play();
-                 // a = currentGame.letters[i].x
-                // b = currentGame.letters[i].y
-                // drawFrame(a, b);
+                // console.log('kjvbdfjhbjk');
+                // cheerSound.play();
+                
                 
                 if(gameIsRunning){
                     currentGame.score ++
@@ -259,13 +256,20 @@ function drawGame(){
             ctx.font = '30px Arial';
             ctx.fillStyle ='white';
             ctx.textAlign = 'center';
-            ctx.fillText('Paused', 300 , 400)
+            ctx.fillText('Paused', 300 , 400);
+            // currentGame.letters[i].y ;
        }
-
+       if(currentGame.letters[i]){
         //when letters reach the bottom
-        if(currentGame.letters[i].y >= (680 - currentGame.letters[i].height) && currentGame.letters[i].letterImage.src.includes('CS')){
+        if((currentGame.letters[i].y + currentGame.letters[i].height) >= 600 && currentGame.letters[i].letterImage.src.includes('CS')){
+            // boomSprite = new Sprite('./images/sprites/Effect-air-16.png', currentGame.letters[i].x, currentGame.letters[i].y )
+            // boomSprite.src = ;
+            // boomSprite.drawFrame();
+            // boomSprite.updateFrame();
             
-            boomSound.play();
+            drawSprite(currentGame.letters[i].x, currentGame.letters[i].y );
+            // console.log('called', boomSprite)
+            // boomSound.play();
             currentGame.letters.splice(i, 1);
             
             //for later score counting:
@@ -274,6 +278,7 @@ function drawGame(){
             }
             document.getElementById('myScore').innerHTML = currentGame.score;  
         }
+    }
 
     }
     

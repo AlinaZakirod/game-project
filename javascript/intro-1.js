@@ -279,6 +279,7 @@ function drawGame(){
         currentGame.letters = [];
         ctx.font = "70px bold Arial";
         ctx.fillStyle = "red";
+        
 function drawGame(){
     if(gameIsRunning){
         requestAnimationFrame(drawGame);
