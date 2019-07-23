@@ -8,28 +8,47 @@
 // 5.2 touch the ground
 //6. win-lose & start-pause
 
-// const canvas = document.querySelector('canvas');
-// canvas.width = 1000;
-// canvas.height = 600;
-// const ctx = canvas.getContext('2d');
-
 const gameRunningBackground = new Image();
 gameRunningBackground.src = './images/bg/screen_frame.png';
 const gameStartBackground = new Image();
 gameStartBackground.src = './images/car.png';
 const gameOverBackground = new Image();
-gameOverBackground.src = './images/gameOver.png';
+gameOverBackground.src = './images/bg/gameOver_1.jpg';
 const victoryBackground = new Image();
-victoryBackground.src = './images/bg/screen_frame.png';
+victoryBackground.src = './images/bg/victory.jpg';
+
+let pauseIcon = new Image();
+pauseIcon.src = './images/bg/pause.svg'
+
+
+
+function sound(src){
+    this.sound = document.createElement('audio');
+    this.sound.src = src;
+    this.sound.setAttribute('preload', 'auto');
+    this.sound.setAttribute('controls', 'none');
+    this.sound.style.display = 'none';
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }
+}
+
+const cheerSound = new sound ('./sounds/cheer.wav');
+const boomSound = new sound('./sounds/boom.wav');
+const bgSound = new sound('./sounds/bensound-jazzyfrenchy.mp3')
 
 window.onload =  function(){
     const canvas = document.querySelector('canvas');
     canvas.width = 1024;
     canvas.height = 600;
     const ctx = canvas.getContext('2d');
-    // document.getElementById("my-game").style.display = "none";//hide it before Start button is pressed
+    
     ctx.drawImage(gameStartBackground,0,0);
-
+    document.getElementById("my-game").style.display = "none";
     canvas.onclick = function(e){
         storeGuess(e);
     }
@@ -58,30 +77,13 @@ class Letter{
 
     drawLetter(){//method to draw a letter
         ctx.drawImage(this.letterImage ,this.x, this.y, this.width, this.height);
-        //ctx.fillStyle = 'yellow'
     }
 
 } // end of Letter Class
 
 
 //Effects: sound, animation
-function sound(src){
-    this.sound = document.createElement('audio');
-    this.sound.src = src;
-    this.sound.setAttribute('preload', 'auto');
-    this.sound.setAttribute('controls', 'none');
-    this.sound.style.display = 'none';
-    document.body.appendChild(this.sound);
-    this.play = function(){
-        this.sound.play();
-    }
-    this.stop = function(){
-        this.sound.pause();
-    }
-}
 
-const cheerSound = new sound ('./sounds/cheer.wav');
-const boomSound = new sound('./sounds/boom.wav')
 
 // for Start button use following lines:
 let currentGame;
@@ -100,86 +102,50 @@ let mouse = {
 function startGame() {
 
     currentGame = new Game();
-    // document.getElementById('my-game').addEventListener('click', function(e){
-    //    mouse.x = event.x;
-    //    mouse.y = event.y; 
-    //    console.log('mouse = == = = = = == = = = ', mouse.x, mouse.y);
-    // });
     gameIsRunning = true;
-    
-
     document.getElementById("my-game").style.display = "block";
     document.getElementById('pause-button').style.display = 'block';
     document.getElementById('start-button').style.display = 'none'
     currentGame = new Game();
     drawGame();
+    bgSound.play();
 }
 
-// ------------------------____________________________------------------------____________________________
+class Sprite {
+    constructor(image, x, y){
+        this.spriteWidth = 1280;
+        this.spriteHeight = 80;
+        this.frames = 16;
+        this.width = this.spriteWidth/this.frames;
+        this.curFrame = 0;
+        this.frameCount = 16;
+        this.image = image
+        // this.image.src = src;
+        this.x = x;
+        this.y = y;
+        this.srcX = 0;
+        this.srcY = 0;
+    }
+    updateSprite(){
+        this.curFrame = ++ this.curFrame % this.frames;
+        ctx.clearRect(this.x, this.y, this.width, this.spriteHeight);
+        }
 
-const spriteWidth = 1280;
-const spriteHeight = 80;
-var cols = 16;
-var width = spriteWidth/cols;
-var curFrame = 0;
-var frameCount = 16;
-let a = 100
-let b = 100
-var srcX = 0;
-var srcY = 0;
-var boomSprite = new Image();
-boomSprite.src = './images/sprites/Effect-fire-16.png';
-
-function updateSprite(){
-    // curFrame++;
-    curFrame = ++curFrame % frameCount;
-    // srcX = curFrame * width;
-    ctx.clearRect(a, b, width, spriteHeight);
+    drawSprite(){
+        // setTimeout(this.updateSprite(), 16000);
+        this.updateSprite();
+        // console.log('jhgdfigh');
+        ctx.drawImage(this.image, this.srcX, this.srcY, this.width, this.spriteHeight, this.x, this.y, this.width, this.spriteHeight);
+        }
 }
 
-function drawSprite(a,b){
-    setTimeout(updateSprite(), 16000);
-    console.log('jhgdfigh');
-    // updateSprite();
-    ctx.drawImage(boomSprite, srcX, srcY, width, spriteHeight, a, b, width, spriteHeight);
-    // updateSprite();
-     }
-// _________________________________________________________________________
-// class Sprite {
-//     constructor(src, x, y){
-//         this.spriteWidth = 1280;
-//         this.spriteHeight = 80;
-//         this.frames = 16;
-//         this.width = this.spriteWidth/this.frames;
-//         this.curFrame = 0;
-//         this.frameCount = 16;
-//         this.x = 100;
-//         this.y = 100;
-//         this.srcX = x;
-//         this.srcY = y;
-//         // this.speed = 200;
-//         this.image = new Image()
-//         this.image.src = src
-//     }
-//     updateFrame(){
-//         this.curFrame = ++ this.curFrame % this.frames;
-//         this.srcX = this.curFrame * this.width;
-//         this.srcY = 0;
-//         ctx.clearRect(this.x, this.y, this.width, this.spriteHeight);
-//         }
-//     drawFrame(){
+//here I declare images for sprites
+let boom = new Image();
+boom.src = './images/sprites/Effect-fire-16.png';
+let air = new Image();
+air.src = './images/sprites/Effect-air-16.png';
 
-//     //     ctx.drawImage(this.image, this.x, this.y);
-//     //     console.log('draw frame!', this.image)
-//     //     this.updateFrame();
-//     //     ctx.drawImage('./images/fuego.png', 100, 100, 100, 100);
-//         ctx.fillRect(40, 40, 40, 40)
 
-//     //  //ctx.drawImage()
-//     }
-// }
-
-// let boomSprite;
 
 document.getElementById("pause-button").onclick = function()  {
     pauseGame();
@@ -192,6 +158,8 @@ function pauseGame() {
     // console.log('stop') ;
 }
 
+
+
 guessX = 0; //stores user's click on canvas
 guessY = 0; //stores user's click on canvas
 function storeGuess(event) {
@@ -202,8 +170,6 @@ function storeGuess(event) {
     console.log("x coords: " + guessX + ", y coords: " + guessY);
 }
 
-
-
 function drawGame(){
 
     ctx.clearRect(0,0,1024,600);
@@ -211,7 +177,7 @@ function drawGame(){
     ctx.drawImage(gameRunningBackground, 0, 0)
     
     if(frames % 50 === 1 ){
-        randomLetterX = Math.floor(Math.random() * 600);
+        randomLetterX = 40 + (Math.floor(Math.random() * 600)- 10);
         letterY = 58; //to start from the top
         letterWidth  = 80;
         letterHeight = 80;
@@ -228,19 +194,17 @@ function drawGame(){
 
             if(currentGame.letters[i].x < guessX && guessX < currentGame.letters[i].x + currentGame.letters[i].width && currentGame.letters[i].y < guessY && guessY < currentGame.letters[i].y + currentGame.letters[i].height && currentGame.letters[i].letterImage.src.includes('CS')){
                 // console.log('ON CLICK COLLISION!!!!!! = = == = == = = =')
-                drawSprite(currentGame.letters[i].x, currentGame.letters[i].y );
-                currentGame.letters.splice(i, 1);
                 guessX = 0;
                 guessY = 0;
-                // drawSprite(currentGame.letters[i].x, currentGame.letters[i].y )
-                // boomSprite = new Sprite("./images/sprites/Effect-fire-16.png", currentGame.letters[i].x , currentGame.letters[i].y );
-                // console.log('boom: ', boomSprite);
-                // boomSprite.drawFrame();
                 
+                
+                let airSprite = new Sprite(air, currentGame.letters[i].x, currentGame.letters[i].y);
+                setTimeout(airSprite.drawSprite(), 12000);
+                currentGame.letters.splice(i, 1);
                 
                 document.getElementById('myScore').innerHTML = currentGame.score;  
                 // console.log('kjvbdfjhbjk');
-                // cheerSound.play();
+                cheerSound.play();
                 
                 
                 if(gameIsRunning){
@@ -250,34 +214,26 @@ function drawGame(){
         //remove image of clicked letter and add score
 
         if(!gameIsRunning){//style for "pause" state
-            ctx.rect(0,0,1024, 600);
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'
-            ctx.fill();
-            ctx.font = '30px Arial';
-            ctx.fillStyle ='white';
-            ctx.textAlign = 'center';
-            ctx.fillText('Paused', 300 , 400);
-            // currentGame.letters[i].y ;
-       }
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
+            ctx.fillRect(0, 0, 1024, 600);
+            ctx.drawImage(pauseIcon, (canvas.width / 2) - 50, (canvas.height / 2) - 50, 100, 100);
+            bgSound.stop();
+        }
        if(currentGame.letters[i]){
         //when letters reach the bottom
         if((currentGame.letters[i].y + currentGame.letters[i].height) >= 600 && currentGame.letters[i].letterImage.src.includes('CS')){
-            // boomSprite = new Sprite('./images/sprites/Effect-air-16.png', currentGame.letters[i].x, currentGame.letters[i].y )
-            // boomSprite.src = ;
-            // boomSprite.drawFrame();
-            // boomSprite.updateFrame();
             
-            drawSprite(currentGame.letters[i].x, currentGame.letters[i].y );
-            // console.log('called', boomSprite)
-            // boomSound.play();
+            let boomSprite = new Sprite(boom, currentGame.letters[i].x, currentGame.letters[i].y);
+            setTimeout(boomSprite.drawSprite(), 1000);
+            boomSound.play();
             currentGame.letters.splice(i, 1);
             
-            //for later score counting:
-            if(gameIsRunning){
-                currentGame.score --;
-            }
-            document.getElementById('myScore').innerHTML = currentGame.score;  
-        }
+                //for later score counting:
+                if(gameIsRunning){
+                    currentGame.score --;
+                }
+                document.getElementById('myScore').innerHTML = currentGame.score;  
+                }
     }
 
     }
@@ -286,21 +242,19 @@ function drawGame(){
         // gameIsRunning = false;
         ctx.fillRect(0,0, 1024, 600);
         ctx.drawImage(gameOverBackground, 0, 0);
-        currentGame.letters = [];
-        ctx.font = "70px bold Arial";
-        ctx.fillStyle = "white";
-        ctx.fillText("Game Over", 300, 200);
         document.getElementById('start-button').style.display = 'block';
         document.getElementById('pause-button').style.display = 'none';
+        currentGame.letters[i].y = 0;
+        currentGame.letters = [];  
     } 
 
     if(currentGame.score > 9){
         ctx.fillRect(0,0, 1024, 600);
-        ctx.drawImage(gameOverBackground, 0, 0);
+        ctx.drawImage(victoryBackground, 0, 0);
         currentGame.letters = [];
-        ctx.font = "70px bold Arial";
-        ctx.fillStyle = "red";
-        ctx.fillText("You Won!", 300, 200);
+        // ctx.font = "70px bold Arial";
+        // ctx.fillStyle = "red";
+        // ctx.fillText("You Won!", 300, 200);
         document.getElementById('start-button').style.display = 'none';
         document.getElementById('pause-button').style.display = 'none';
         document.getElementById('second-level').style.display = 'block';
