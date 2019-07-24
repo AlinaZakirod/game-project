@@ -90,9 +90,12 @@ let currentGame;
 let frames = 0;
 
 
+
 document.getElementById("start-button").onclick = function() {
     startGame();
   };
+
+  
 
 let mouse = {
     x: undefined,
@@ -102,10 +105,13 @@ let mouse = {
 function startGame() {
 
     currentGame = new Game();
+    
     gameIsRunning = true;
+    // currentGame.letters[i].y = 0;
     document.getElementById("my-game").style.display = "block";
     document.getElementById('pause-button').style.display = 'block';
-    document.getElementById('start-button').style.display = 'none'
+    document.getElementById('start-button').style.display = 'none';
+    document.getElementById('new_game').style.display = 'none'
     currentGame = new Game();
     drawGame();
     bgSound.play();
@@ -187,7 +193,7 @@ function drawGame(){
         currentGame.letters.push(letter);
       } 
       for (let i=0; i < currentGame.letters.length; i++){
-        currentGame.letters[i].y += 2;
+        currentGame.letters[i].y += 2.5;
         
         // console.log(currentGame.letters[i], randomLetterX, letterY)
         currentGame.letters[i].drawLetter();
@@ -238,17 +244,19 @@ function drawGame(){
 
     }
     
-    if(currentGame.score < -9){
+    if(currentGame.score < -5){
         // gameIsRunning = false;
         ctx.fillRect(0,0, 1024, 600);
         ctx.drawImage(gameOverBackground, 0, 0);
-        document.getElementById('start-button').style.display = 'block';
+        document.getElementById('new_game').style.display = 'block';
         document.getElementById('pause-button').style.display = 'none';
+        document.getElementById('start-button').style.display = 'none';
         currentGame.letters[i].y = 0;
         currentGame.letters = [];  
+
     } 
 
-    if(currentGame.score > 9){
+    if(currentGame.score > 5){
         ctx.fillRect(0,0, 1024, 600);
         ctx.drawImage(victoryBackground, 0, 0);
         currentGame.letters = [];
@@ -257,7 +265,8 @@ function drawGame(){
         // ctx.fillText("You Won!", 300, 200);
         document.getElementById('start-button').style.display = 'none';
         document.getElementById('pause-button').style.display = 'none';
-        document.getElementById('second-level').style.display = 'block';
+        document.getElementById('new_game').style.display = 'block';
+        currentGame.letters[i].y = 0;
     }
     // to stop running the function behind the scene when the "pause" button is clicked
     // this also controls the speed 
@@ -265,5 +274,19 @@ function drawGame(){
         requestAnimationFrame(drawGame);
     }  
  }
+
+
+ document.getElementById("new_game").onclick = function() {
+    
+    startGame();
+    
+    document.getElementById('pause-button').style.display = 'block';
+    let updatedScore = 0;
+    document.getElementById('myScore').innerHTML = updatedScore;
+    document.getElementById('start-button').style.display = 'none';
+    
+    currentGame.letters = [];  
+    
+  };
 }
 
