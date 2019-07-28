@@ -21,25 +21,31 @@ let pauseIcon = new Image();
 pauseIcon.src = './images/bg/pause.svg'
 
 
+let currentGame;
+let frames = 0;
 
-function sound(src){
-    this.sound = document.createElement('audio');
-    this.sound.src = src;
-    this.sound.setAttribute('preload', 'auto');
-    this.sound.setAttribute('controls', 'none');
-    this.sound.style.display = 'none';
-    document.body.appendChild(this.sound);
-    this.play = function(){
+// sounds
+class Sound{
+    constructor(src){
+        this.sound = document.createElement('audio');
+        this.sound.src = src;
+        this.sound.setAttribute('preload', 'auto');
+        this.sound.setAttribute('controls', 'none');
+        this.sound.style.display = 'none';
+        document.body.appendChild(this.sound);
+    }
+    play(){
         this.sound.play();
     }
-    this.stop = function(){
+    stop(){
         this.sound.pause();
     }
 }
 
-const cheerSound = new sound ('./sounds/cheer.wav');
-const boomSound = new sound('./sounds/boom.wav');
-const bgSound = new sound('./sounds/bensound-jazzyfrenchy.mp3')
+const cheerSound = new Sound ('./sounds/cheer.wav');
+const boomSound = new Sound('./sounds/boom.wav');
+const bgSound = new Sound('./sounds/bensound-jazzyfrenchy.mp3')
+//end of sounds
 
 window.onload =  function(){
     const canvas = document.querySelector('canvas');
@@ -60,6 +66,14 @@ class Game{
         this.letters = [];//array of falling letters
         this.score = 0;
     }
+
+    pauseGame() {
+        document.getElementById('start-button').style.display = 'block';
+        document.getElementById('pause-button').style.display = 'none';
+        gameIsRunning = false;
+        // console.log('stop') ;
+    }
+    
 }
 
 //class for of letters of all the fonts
@@ -81,33 +95,13 @@ class Letter{
 
 } // end of Letter Class
 
-
-//Effects: sound, animation
-
-
-// for Start button use following lines:
-let currentGame;
-let frames = 0;
-
-
-
 document.getElementById("start-button").onclick = function() {
     startGame();
   };
-
-  
-
-let mouse = {
-    x: undefined,
-    y: undefined
-}
-
+ 
 function startGame() {
-
     currentGame = new Game();
-    
     gameIsRunning = true;
-    // currentGame.letters[i].y = 0;
     document.getElementById("my-game").style.display = "block";
     document.getElementById('pause-button').style.display = 'block';
     document.getElementById('start-button').style.display = 'none';
@@ -126,7 +120,6 @@ class Sprite {
         this.curFrame = 0;
         this.frameCount = 16;
         this.image = image
-        // this.image.src = src;
         this.x = x;
         this.y = y;
         this.srcX = 0;
@@ -154,15 +147,8 @@ air.src = './images/sprites/Effect-air-16.png';
 
 
 document.getElementById("pause-button").onclick = function()  {
-    pauseGame();
+    currentGame.pauseGame();
 };
-
-function pauseGame() {
-    document.getElementById('start-button').style.display = 'block';
-    document.getElementById('pause-button').style.display = 'none';
-    gameIsRunning = false;
-    // console.log('stop') ;
-}
 
 
 
@@ -260,9 +246,6 @@ function drawGame(){
         ctx.fillRect(0,0, 1024, 600);
         ctx.drawImage(victoryBackground, 0, 0);
         currentGame.letters = [];
-        // ctx.font = "70px bold Arial";
-        // ctx.fillStyle = "red";
-        // ctx.fillText("You Won!", 300, 200);
         document.getElementById('start-button').style.display = 'none';
         document.getElementById('pause-button').style.display = 'none';
         document.getElementById('new_game').style.display = 'block';
@@ -290,3 +273,11 @@ function drawGame(){
   };
 }
 
+// function visualPause(something1, something2){
+
+//     document.getElementById('pause-button').style.display = `${something1}`;
+//     document.getElementById('myScore').innerHTML = updatedScore;
+//     document.getElementById('start-button').style.display = 'none';
+// }
+
+//make game Methods, remove lines you don't use + function for turn on and off
